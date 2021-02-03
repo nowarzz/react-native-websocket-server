@@ -21,16 +21,23 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.handshake.Handshakedata;
 import org.java_websocket.handshake.ServerHandshake;
 import org.java_websocket.handshake.ServerHandshakeBuilder;
-
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.Inet4Address;
+import java.net.SocketException;
+import java.util.Enumeration;
 /**
  * Created by umsi on 27/11/2017.
  */
 
 public class RNWebsocketServerModule extends ReactContextBaseJavaModule {
+    private static final String TAG = "RNWebsocketServerModule";
     private WebServer webServer = null;
+    private ReactApplicationContext mContext;
 
     public RNWebsocketServerModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        this.mContext = reactContext;
     }
 
     @Override
@@ -39,10 +46,11 @@ public class RNWebsocketServerModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void start(String ipAddress, int port) throws IOException, InterruptedException {
+    public void start(int port) throws IOException, InterruptedException {
+        InetAddress ipAddress = getInetAddress();
         InetSocketAddress inetSocketAddress = new InetSocketAddress(ipAddress, port);
 
-        webServer = new WebServer(inetSocketAddress);
+        webServer = new WebServer(inetSocketAddress, this.mContext);
 
         webServer.start();
     }
@@ -50,5 +58,30 @@ public class RNWebsocketServerModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void stop() throws IOException, InterruptedException {
         webServer.stop();
+    }
+
+    @ReactMethod
+    public void sendMessage(String message) {
+        webServer.sendMessage(message);
+    }
+
+    private static InetAddress getInetAddress() {
+        try {
+            for (Enumeration en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface networkInterface = (NetworkInterface) en.nextElement();
+
+                for (Enumeration enumIpAddr = networkInterface.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = (InetAddress) enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
+                        return inetAddress;
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error getting the network interface information");
+        }
+
+        return null;
     }
 }
