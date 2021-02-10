@@ -132,8 +132,5 @@ public class WebServer extends WebSocketServer {
         }
     }
 
-    public boolean isOpen() {
-        return this.mSocket != null;
-    }
 }
 

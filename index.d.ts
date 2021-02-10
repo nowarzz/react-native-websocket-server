@@ -3,6 +3,7 @@ declare module 'react-native-websocket-server' {
   export default class WebsocketServer{
     port: number;
     eventEmitter: NativeEventEmitter;
+    _isOpen: boolean;
 
     constructor(port?: number);
     start: () => void;

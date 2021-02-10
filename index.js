@@ -3,15 +3,18 @@ import {NativeEventEmitter, NativeModules } from 'react-native';
 const { RNWebsocketServer } = NativeModules;
 
 export default class WebsocketServer {
+    _isOpen;
     constructor (port = 3770) {
         this.port = port;
         this.eventEmitter = new NativeEventEmitter(RNWebsocketServer);
+        this._isOpen = false;
     }
     /**
      * Starts websocket server
      */
     start () {
         RNWebsocketServer.start(this.port);
+        this.isOpen = true;
     }
 
     /**
@@ -19,6 +22,7 @@ export default class WebsocketServer {
      */
     stop () {
         RNWebsocketServer.stop();
+        this.isOpen = false;
     }
 
     sendMessage (message) {
@@ -30,7 +34,7 @@ export default class WebsocketServer {
     }
 
     isOpen () {
-        return RNWebsocketServer.isOpen();
+        return this._isOpen;
     }
     
 }
