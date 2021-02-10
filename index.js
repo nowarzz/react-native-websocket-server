@@ -28,5 +28,9 @@ export default class WebsocketServer {
     getEvent () {
         return this.eventEmitter;
     }
+
+    isOpen () {
+        return this.isOpen();
+    }
     
 }

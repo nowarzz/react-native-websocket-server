@@ -131,5 +131,9 @@ public class WebServer extends WebSocketServer {
             sendEvent("WS_NOTCONNECTED", null);
         }
     }
+
+    public boolean isOpen() {
+        return this.mSocket != null;
+    }
 }
 

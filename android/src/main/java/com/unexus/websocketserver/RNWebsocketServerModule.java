@@ -65,6 +65,11 @@ public class RNWebsocketServerModule extends ReactContextBaseJavaModule {
         webServer.sendMessage(message);
     }
 
+    @ReactMethod
+    public boolean isOpen() {
+        return webServer.isOpen();
+    }
+
     private static InetAddress getInetAddress() {
         try {
             for (Enumeration en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
