@@ -30,7 +30,7 @@ export default class WebsocketServer {
     }
 
     isOpen () {
-        return this.isOpen();
+        return RNWebsocketServer.isOpen();
     }
     
 }
