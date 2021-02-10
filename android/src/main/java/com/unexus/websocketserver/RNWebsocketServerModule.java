@@ -67,7 +67,7 @@ public class RNWebsocketServerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public boolean isOpen() {
-        if (webServer === null) {
+        if (webServer == null) {
             return false;
         } else {
             return webServer.isOpen();
