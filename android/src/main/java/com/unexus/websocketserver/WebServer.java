@@ -23,6 +23,7 @@ public class WebServer extends WebSocketServer {
     public WebServer(InetSocketAddress inetSocketAddress, ReactApplicationContext reactContext) {
         super(inetSocketAddress);
         this.mContext = reactContext;
+        this.setReuseAddr(true);
     }
 
     private void sendEvent(String eventName,
