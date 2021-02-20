@@ -57,12 +57,16 @@ public class RNWebsocketServerModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void stop() throws IOException, InterruptedException {
-        webServer.stop();
+        if (webServer != null) {
+            webServer.stop();
+        }
     }
 
     @ReactMethod
     public void sendMessage(String message) {
-        webServer.sendMessage(message);
+        if (webServer != null) {
+            webServer.sendMessage(message);
+        }
     }
     
     private static InetAddress getInetAddress() {

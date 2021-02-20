@@ -37,7 +37,9 @@ public class WebServer extends WebSocketServer {
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         mSocket = conn;
         WritableMap params = Arguments.createMap();
-        params.putString("HostName", conn.getRemoteSocketAddress().getHostName());
+        if (conn != null && conn.getRemoteSocketAddress() != null) {
+            params.putString("HostName", conn.getRemoteSocketAddress().getHostName());  
+        }
         sendEvent("WS_ONOPEN", params);
         // try {
         //     String jsonString = (new JSONObject()).put("type", "onMessage")
@@ -54,7 +56,9 @@ public class WebServer extends WebSocketServer {
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         WritableMap params = Arguments.createMap();
-        params.putString("HostName", conn.getRemoteSocketAddress().getHostName());
+        if (conn != null && conn.getRemoteSocketAddress() != null) {
+            params.putString("HostName", conn.getRemoteSocketAddress().getHostName());
+        }
         params.putInt("Code", code);
         params.putString("Reason", reason);
         params.putBoolean("Remote", remote);
@@ -90,7 +94,7 @@ public class WebServer extends WebSocketServer {
     @Override
     public void onError(WebSocket conn, Exception ex) {
         WritableMap params = Arguments.createMap();
-        if (conn != null) {
+        if (conn != null  && conn.getRemoteSocketAddress() != null) {
             params.putString("HostName", conn.getRemoteSocketAddress().getHostName());
         }
         params.putString("Error", ex.getMessage());
